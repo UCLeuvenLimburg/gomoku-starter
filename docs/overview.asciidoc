@@ -11,6 +11,10 @@
 
 # Overview
 
+This documentation is subject to change.
+Make sure to check for updates.
+The documentation is included in the repository, meaning you can easily when changes are made (by subscribing as a watcher) and what they are (using `git diff`).
+
 * <<setup.asciidoc#,Setup Instructions>>
 * <<gomoku-rules.asciidoc#,Game Rules>>
 * <<getting-started.asciidoc#,Getting Started>>
