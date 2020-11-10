@@ -12,4 +12,5 @@
 # Overview
 
 * <<setup.asciidoc#,Setup Instructions>>
-* <<getting-started.asciidoc#,Geting Started>>
+* <<gomoku-rules.asciidoc#,Game Rules>>
+* <<getting-started.asciidoc#,Getting Started>>
