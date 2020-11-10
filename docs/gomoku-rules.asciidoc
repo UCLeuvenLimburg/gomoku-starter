@@ -25,4 +25,4 @@ An optional rule introduced _capturing_:
 * When a player can surround two of his opponent's stone (e.g., BWWB of WBBW), the enclosed stones are removed from the board (e.g., BWWB becomes B..B).
 * On the next turn, it is forbidden to place a stone where stones were previously captured.
 
-You can play it https://gomokuonline.com/[online] here against an AI (without the capturing move.)
+You can play it online https://gomokuonline.com/[here] against an AI (without the capturing move.)
