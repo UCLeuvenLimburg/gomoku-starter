@@ -1,0 +1,75 @@
+// ROOT
+:tip-caption: 💡
+:note-caption: ℹ️
+:important-caption: ⚠️
+:task-caption: 👨‍🔧
+:source-highlighter: pygments
+:toc: left
+:toclevels: 3
+:experimental:
+:nofooter:
+
+# Setup Instructions
+
+On Toledo, a link should be provided to GitHub Classroom. Go there and accept the assignment. This will create your private fork (= copy) of this repository.
+You will be given the URL to this fork, which you can use to clone the forked repository to your laptop:
+
+[source,bash]
+----
+# Needs to happen only once
+$ git clone URL gomoku
+----
+
+where `URL` is replaced by the URL of your fork.
+This will create a directory `gomoku` and download the repository to that location.
+
+[IMPORTANT]
+====
+Regularly push your project code to GitHub.
+
+This is a safety measure against technical mishaps.
+If you were to lose your hard work and have failed to push your code frequently, expect no compassion from us.
+====
+
+## Receiving Updates
+
+In order to receive updates, you need to link your repository to my original repository.
+
+[source,bash]
+----
+# Needs to happen only once
+$ git remote add upstream https://github.com/UCLeuvenLimburg/gomoku-starter
+----
+
+New updates can now be retrieved using
+
+[source,bash]
+----
+# Needs to happen for each update
+$ git pull upstream master
+----
+
+[IMPORTANT]
+====
+It is your responsibility to download updates as they become available.
+You can ask GitHub to notify you whenever an update is made to the repository using the watch functionality (top right corner) provided on the https://github.com/UCLeuvenLimburg/gomoku-starter[repository's website].
+====
+
+## Compiling the Documentation
+
+Start with installing https://www.ruby-lang.org/en/downloads/[Ruby].
+Next, install the necessary gems (= Ruby packages)
+
+[source,bash]
+----
+# Needs to happen only once
+$ gem install asciidoctor
+----
+
+To actually build the documentation, run the following command in your repo's root directory (it contains `Rakefile`).
+
+[source,bash]
+----
+# Needs to happen after every update
+$ rake
+----
