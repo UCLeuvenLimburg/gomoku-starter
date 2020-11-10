@@ -17,6 +17,10 @@
 * Add a new "Class Library (.NET Core)" to the solution (in the Solution Explorer, right click on the solution at the root of the tree, choose Add &rarr; New Project). Name this project `ViewModel`.
 * Add a new "WPF App (.NET Core)" to the solution. Name it `View`.
 * In the Solution Explorer, right click on `View` and select Set as Startup Project.
+
+If you press F5 (= run in debug mode), you should be greeted with an empty window.
+Next, let's tell these freshly created projects which other projects they can depend upon.
+
 * In the Solution Explorer, right click on Dependencies under ViewModel, pick add Project Dependencies and select Cells and Model. Definitely do *not* select View.
 * Similarly, add the following dependencies to the View project: Cells, Model and ViewModel (i.e., all three).
 
@@ -32,7 +36,5 @@ This leads to the following dependency structure:
 where projects can only depend on things *below* them.
 In other words:
 
-* The ViewModel must be independent of WPF.
+* The ViewModel must be independent of WPF and the View.
 * There are no restrictions imposed on the View: it sees all.
-
-
