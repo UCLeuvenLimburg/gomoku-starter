@@ -89,6 +89,8 @@ var items = new List<string> { "a", "b", "c", "d", "e" };
 A window should appear showing the five strings one below the other.
 ====
 
+=== `ItemTemplate`
+
 Right now, the `ItemsControl` uses the default way to render the elements in its `ItemsSource`: it draws them as simple strings.
 We would like to turn this into five buttons whose captions are these strings.
 For this, we need to make use of the ``ItemsControl``'s `ItemTemplate` property.
@@ -172,8 +174,10 @@ Update the `Button`'s `Content` so that it shows the value of its `DataContext.
 
 Here, `{Binding .}` means "use the `DataContext` itself".
 
-Run your code (F5). You should see five buttons, labeled `a`, `b`, `c`, `d` and `e`.
+Run your code. You should see five buttons, labeled `a`, `b`, `c`, `d` and `e`.
 ====
+
+=== `ItemsPanel`
 
 The buttons are laid out vertically.
 In order to render the rows, we need them to be arranged horizontally instead.
@@ -200,6 +204,69 @@ Lucky for us, the `ItemsControl` has a property `ItemsPanel` which determines ho
 By default the `ItemsControl` uses a `StackPanel` with `Orientation="Vertical"`.
 The above code changes this to a `StackPanel` with `Orientation="Horizontal"`.
 
-Run your code (F5).
+Run your code.
 The buttons should now be arranged horizontally instead of vertically.
+====
+
+=== Going 2D
+
+We now have all ingredients to be able to show a grid.
+
+[NOTE,caption={task-caption}]
+====
+Start with creating grid data in ``MainWindow``'s constructor in `MainWindow.xaml.cs`.
+
+[source,csharp]
+----
+var row1 = new List<string> { "a", "b", "c", "d", "e" };
+var row2 = new List<string> { "e", "f", "g", "h", "i" };
+var row3 = new List<string> { "j", "k", "l", "m", "n" };
+var grid = new List<List<string>> { row1, row2, row3 };
+
+this.boardView.ItemsSource = grid;
+----
+
+If you run your code, you should see three horizontally arranged buttons.
+Each `Button` has a `List<string>` as `DataContext`, which is also uses as `Content`.
+Since WPF does not know how to render these, it decides to improve.
+====
+
+Now comes the tricky part: we need to visualize this grid.
+
+[NOTE,caption={task-caption}]
+====
+* Go to `MainWindow.xaml`.
+* Put your current `ItemsControl` in comments, so that you can reuse parts of it.
+* Add code that creates a fresh `ItemsControl`.
+  This will be the top level `ItemsControl` that's in charge of visualizing all rows.
+  Remember that its `ItemsSource` is set to `grid`, i.e., a `List<List<string>>`.
+* This top level `ItemsControl` should lay out its children *vertically*. Since this is the default, you do not need to specify a new `ItemsPanel`.
+* Next, add code that sets its `ItemTemplate`.
+* Inside this `ItemTemplate`, again create an `ItemsControl`. This one will be responsible to render a single row.
+* Have this inner `ItemsPanel` arrange its items *horizontally*.
+* Have its `ItemTemplate` be a `Button`.
+* For now, set this ``Button``'s `Content` to simply `x`.
+* Lastly, we must set the inner ``ItemControl``'s `ItemsSource`.
+  We know that the outer `ItemsControl` has set its `DataContext` to a row, i.e., a `List<string>`.
+  So, we should simply bind the inner ``ItemControl``'s `ItemsSource` to this `DataContext`: `ItemsSource={Binding .}`.
+
+Run your code.
+You should see a 3 rows of 5 buttons, all labeled `x`.
+====
+
+Instead of having every `Button` show `x`, we want them to show their corresponding letter.
+
+[NOTE,caption={task-caption}]
+====
+Adjust the ``Button``'s `Content` so that it shows the correct letter instead of `x`.
+Think of what each ``Button``'s `DataContext` is set to.
+Remember that there are ways to find out what its value is if you're in doubt.
+====
+
+Each button has a different size, due to the letters having varying sizes.
+For Gomoku, it'd be easier to play if each button had the same size.
+
+[NOTE,caption={task-caption}]
+====
+Set the ``Button``'s `Width` and `Height` to `32`.
 ====
