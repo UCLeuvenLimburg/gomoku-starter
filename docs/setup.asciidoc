@@ -57,7 +57,19 @@ You can ask GitHub to notify you whenever an update is made to the repository us
 
 ## Compiling the Documentation
 
-Start with installing https://www.ruby-lang.org/en/downloads/[Ruby].
+The documentation related to this project is included in the repository.
+It has been written in the asciidoc which should be compiled to html format.
+You can read the documentation as follows:
+
+* Some are okay reading the asciidoc files in raw form.
+  Of all the options listed here, this is the least reader friendly.
+* GitHub can convert asciidoc to html for you.
+  This means you can consult the documentation using GitHub's website.
+  However, GitHub does not support all of asciidoc's features, causing readability to suffer.
+* You can compile the asciidoc files to html yourself by following the instructions below.
+  This leads you to have the documentation in their most readable form.
+
+To compile the documentation yourself, start with installing https://www.ruby-lang.org/en/downloads/[Ruby].
 Next, install the necessary gems (= Ruby packages)
 
 [source,bash]
