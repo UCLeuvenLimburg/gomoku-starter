@@ -11,7 +11,28 @@
 
 # Getting Started
 
-## Opening the Project in Visual Studio
+## Setting Up Visual Studio
 
-Open the project by opening its solution file, `Gomoku.sln`.
+* Open the Gomoku solution in Visual Studio by opening the solution file `Gomoku.sln`.
+* Add a new "Class Library (.NET Core)" to the solution (in the Solution Explorer, right click on the solution at the root of the tree, choose Add &rarr; New Project). Name this project `ViewModel`.
+* Add a new "WPF App (.NET Core)" to the solution. Name it `View`.
+* In the Solution Explorer, right click on `View` and select Set as Startup Project.
+* In the Solution Explorer, right click on Dependencies under ViewModel, pick add Project Dependencies and select Cells and Model. Definitely do *not* select View.
+* Similarly, add the following dependencies to the View project: Cells, Model and ViewModel (i.e., all three).
+
+This leads to the following dependency structure:
+
+[.center,cols="^,^,^",width="40%"]
+|===
+3+| View
+2+| ViewModel | WPF
+| Model | Cell |
+|===
+
+where projects can only depend on things *below* them.
+In other words:
+
+* The ViewModel must be independent of WPF.
+* There are no restrictions imposed on the View: it sees all.
+
 
