@@ -48,4 +48,11 @@ task :build do
     copy_images
 end
 
+task :upload do
+    Dir.chdir 'dist' do
+        `ssh -p 22345 -l upload leone.ucll.be rm -rf /home/frederic/courses/vgo/volume/*`
+        puts `scp -P 22345 -r * upload@leone.ucll.be:/home/frederic/courses/vgo/volume`
+    end
+end
+
 task :default => [ :build ]
