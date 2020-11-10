@@ -2,7 +2,7 @@
 :tip-caption: 💡
 :note-caption: ℹ️
 :important-caption: ⚠️
-:task-caption: 👨‍🔧
+:task-caption: 🔨
 :source-highlighter: pygments
 :toc: left
 :toclevels: 3
