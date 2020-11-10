@@ -27,11 +27,15 @@ namespace Model.Gomoku
         private class WhiteStone : Stone
         {
             public override Stone Other => Stone.BLACK;
+
+            public override string ToString() => "W";
         }
 
         private class BlackStone : Stone
         {
             public override Stone Other => Stone.WHITE;
+
+            public override string ToString() => "B";
         }
     }
 }
