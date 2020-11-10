@@ -13,16 +13,22 @@
 
 ## Setting Up Visual Studio
 
+[NOTE,caption={task-caption}]
+====
 * Open the Gomoku solution in Visual Studio by opening the solution file `Gomoku.sln`.
 * Add a new "Class Library (.NET Core)" to the solution (in the Solution Explorer, right click on the solution at the root of the tree, choose Add &rarr; New Project). Name this project `ViewModel`.
 * Add a new "WPF App (.NET Core)" to the solution. Name it `View`.
 * In the Solution Explorer, right click on `View` and select Set as Startup Project.
+====
 
 If you press F5 (= run in debug mode), you should be greeted with an empty window.
 Next, let's tell these freshly created projects which other projects they can depend upon.
 
+[NOTE,caption={task-caption}]
+====
 * In the Solution Explorer, right click on Dependencies under ViewModel, pick add Project Dependencies and select Cells and Model. Definitely do *not* select View.
 * Similarly, add the following dependencies to the View project: Cells, Model and ViewModel (i.e., all three).
+====
 
 This leads to the following dependency structure:
 
@@ -38,3 +44,162 @@ In other words:
 
 * The ViewModel must be independent of WPF and the View.
 * There are no restrictions imposed on the View: it sees all.
+
+## Creating a Grid
+
+During development, our first goal should be the produce visible results.
+The sooner we can see that our code works, the better.
+We do not want to have to first write dozens of lines of codes before being able to check their correctness.
+
+In the case of Gomoku, a logical first step would be to visualize the board.
+Unfortunately, this is also the most difficult step of the project.
+However, this should not be a problem: this allows this guide to start off with giving you detailed information to help you get past this first obstacle.
+The guide will then become less and less detailed as you progress.
+
+### `ItemsControl`
+
+The game board is a grid with dimensions W &times; H (W columns, H rows).
+Our goal is to visualize this as H rows of W buttons, each button corresponding to one square in the grid.
+
+The easiest way to achieve this is to rely on ``ItemsControl``s.
+An `ItemsControl` is a control that allows us to easily visualize lists, where we can specify how each item of the list should be visualized.
+Since a grid is essentially a list of lists, we can use similarly nested ``ItemsControl``s to produce a visual grid.
+
+* The top level `ItemsControl` receives a list of H rows.
+* We need to tell this top level `ItemsControl` how to render these rows.
+  We do this by having it create a new `ItemsControl` for each row.
+* Each of these second level ``ItemsControl``s receives a list of W squares.
+
+Let's build towards this structure step by step.
+We start off by using an `ItemsControl` in the simplest possible way.
+
+[NOTE,caption={task-caption}]
+====
+* In `MainWindow.xaml`, add an `ItemsControl` inside the `Grid.
+* Give it a name using the `x:Name` property, e.g., `boardView`.
+* In `MainWindow.xaml.cs`, create a `List<string>` with some strings in it:
++
+[source,csharp]
+----
+var items = new List<string> { "a", "b", "c", "d", "e" };
+----
+* Assign this list to `boardView.ItemsSource`. This tells the `ItemsControl` which values it should show.
+* Run the project (F5).
+
+A window should appear showing the five strings one below the other.
+====
+
+Right now, the `ItemsControl` uses the default way to render the elements in its `ItemsSource`: it draws them as simple strings.
+We would like to turn this into five buttons whose captions are these strings.
+For this, we need to make use of the ``ItemsControl``'s `ItemTemplate` property.
+
+[NOTE,caption={task-caption}]
+====
+* In `MainWindow.xaml`, set the `ItemTemplate` property as follows:
++
+[source,diff]
+----
+  <ItemsControl x:Name="boardView">
++     <ItemsControl.ItemTemplate>
++         <DataTemplate>
++
++         </DataTemplate>
++     </ItemsControl.ItemTemplate>
+  </ItemsControl>
+----
+* The `DataTemplate` represents how each element must be rendered.
+  Place a `Button` in here.
++
+[source,diff]
+----
+  <ItemsControl x:Name="boardView">
+      <ItemsControl.ItemTemplate>
+          <DataTemplate>
++             <Button />
+          </DataTemplate>
+      </ItemsControl.ItemTemplate>
+  </ItemsControl>
+----
+* Run the code (F5).
+
+A window with five very narrow buttons should appear.
+====
+
+The buttons' small height is due to the fact that we have not given them a label.
+Let's rectify this:
+
+[NOTE,caption={task-caption}]
+====
+* Give the `Button` a caption. Let's keep it simple for now and use `Click me`.
++
+[source,diff]
+----
+  <ItemsControl x:Name="boardView">
+      <ItemsControl.ItemTemplate>
+          <DataTemplate>
+-              <Button />
++              <Button Content="Click me" />
+          </DataTemplate>
+      </ItemsControl.ItemTemplate>
+  </ItemsControl>
+----
+* Run your code (F5).
+
+You should see five buttons, each labeled `Click me`.
+====
+
+Next, instead of labeling each button `Click me`, we want them to show the strings in the `ItemsSource`.
+
+The `ItemsControl` instantiates the `ItemTemplate` for each of the elements in `ItemsSource`, in our case a `Button`.
+It also sets the `DataContext` of each of these ``Button``s: the first `Button` will have `"a"` as `DataContext`, the second `"b"`, and so on.
+In other words, each `Button` can rely on its `DataContext` to know which element it corresponds to.
+
+[NOTE,caption={task-caption}]
+====
+Update the `Button`'s `Content` so that it shows the value of its `DataContext.
+
+[source,diff]
+----
+  <ItemsControl x:Name="boardView">
+      <ItemsControl.ItemTemplate>
+          <DataTemplate>
+-              <Button Content="Click me" />
++              <Button Content="{Binding .}" />
+          </DataTemplate>
+      </ItemsControl.ItemTemplate>
+  </ItemsControl>
+----
+
+Here, `{Binding .}` means "use the `DataContext` itself".
+
+Run your code (F5). You should see five buttons, labeled `a`, `b`, `c`, `d` and `e`.
+====
+
+The buttons are laid out vertically.
+In order to render the rows, we need them to be arranged horizontally instead.
+Lucky for us, the `ItemsControl` has a property `ItemsPanel` which determines how the buttons will be positioned.
+
+[NOTE,caption={task-caption}]
+====
+[source,diff]
+----
+  <ItemsControl x:Name="boardView">
+      <ItemsControl.ItemTemplate>
+          <DataTemplate>
+              <Button Content="{Binding .}" />
+          </DataTemplate>
+      </ItemsControl.ItemTemplate>
++     <ItemsControl.ItemsPanel>
++         <ItemsPanelTemplate>
++             <StackPanel Orientation="Horizontal" />
++         </ItemsPanelTemplate>
++     </ItemsControl.ItemsPanel>
+  </ItemsControl>
+----
+
+By default the `ItemsControl` uses a `StackPanel` with `Orientation="Vertical"`.
+The above code changes this to a `StackPanel` with `Orientation="Horizontal"`.
+
+Run your code (F5).
+The buttons should now be arranged horizontally instead of vertically.
+====
