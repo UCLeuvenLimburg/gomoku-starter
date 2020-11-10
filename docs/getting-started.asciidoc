@@ -9,9 +9,9 @@
 :experimental:
 :nofooter:
 
-# Getting Started
+= Getting Started
 
-## Setting Up Visual Studio
+== Setting Up Visual Studio
 
 [NOTE,caption={task-caption}]
 ====
@@ -45,7 +45,7 @@ In other words:
 * The ViewModel must be independent of WPF and the View.
 * There are no restrictions imposed on the View: it sees all.
 
-## Creating a Grid
+== Creating a Grid
 
 During development, our first goal should be the produce visible results.
 The sooner we can see that our code works, the better.
@@ -56,7 +56,7 @@ Unfortunately, this is also the most difficult step of the project.
 However, this should not be a problem: this allows this guide to start off with giving you detailed information to help you get past this first obstacle.
 The guide will then become less and less detailed as you progress.
 
-### `ItemsControl`
+=== ItemsControl
 
 The game board is a grid with dimensions W &times; H (W columns, H rows).
 Our goal is to visualize this as H rows of W buttons, each button corresponding to one square in the grid.
@@ -89,7 +89,7 @@ var items = new List<string> { "a", "b", "c", "d", "e" };
 A window should appear showing the five strings one below the other.
 ====
 
-=== `ItemTemplate`
+=== ItemTemplate
 
 Right now, the `ItemsControl` uses the default way to render the elements in its `ItemsSource`: it draws them as simple strings.
 We would like to turn this into five buttons whose captions are these strings.
@@ -177,7 +177,7 @@ Here, `{Binding .}` means "use the `DataContext` itself".
 Run your code. You should see five buttons, labeled `a`, `b`, `c`, `d` and `e`.
 ====
 
-=== `ItemsPanel`
+=== ItemsPanel
 
 The buttons are laid out vertically.
 In order to render the rows, we need them to be arranged horizontally instead.
@@ -269,4 +269,222 @@ For Gomoku, it'd be easier to play if each button had the same size.
 [NOTE,caption={task-caption}]
 ====
 Set the ``Button``'s `Width` and `Height` to `32`.
+====
+
+== IGame
+
+Currently, we have defined our own grid data.
+In this section, we will start relying on domain classes.
+Let's explore these for a bit.
+
+A game is by an object implementing the `IGame` interface.
+This interface contains all Gomoku-related functionality.
+To create a game, `IGame` offers a static factory method:
+
+[source,csharp]
+----
+var game = IGame.Create(boardSize, capturing)
+----
+
+where
+
+* `boardSize` is an `int` representing the size of the board;
+* `capturing` is a `bool` determining whether or not capturing is enabled.
+
+Right now, we are interested in the board.
+We can access this using the `Board` property:
+
+[source,csharp]
+----
+var board = game.Board;
+----
+
+It should not come as a surprise that this `board` contains all information related to the game board.
+
+[source,csharp]
+----
+// Querying width
+var width = board.Width;
+
+// Querying height
+var height = board.Height;
+
+// Querying square
+var position = new Vector2D(0, 0);
+var stone = board[position];
+----
+
+Here, `stone` has type `Stone`.
+A `Stone` can be one of three values:
+
+* `Stone.BLACK` represents a black stone;
+* `Stone.WHITE` represents a white stone;
+* `null` represents a lack of stone.
+
+In order for our `ItemsControl` construction to be able to work with this board, we need to restructure the data as a list of lists.
+
+[NOTE,caption={task-caption}]
+====
+In `MainWindow.xaml.cs`, add the following methods to the `MainWindow` class:
+
+* Write a method `IEnumerable<Stone> Row(IGameBoard board, int row)` that returns a `List<Stone>` containing all stones on the ``row``th row of `board`.
+* Write a method `IEnumerable<IEnumerable<Stone>> Rows(IGameBoard board)` that calls `Row` for every row on `board` and returns the results as a list.
+  In other words, this method returns a list of the rows of `board`.
+* In the `MainWindow` constructor:
+** Get rid of the old `List<List<string>>` related code.
+** Create an `IGame` object with board size `5` (capturing does not matter).
+** Use `Rows` to turn the ``IGame``'s `Board` into a `IEnumerable<IEnumerable<Stone>>`.
+** Use this last result as the outer ``ItemsControl``'s `ItemsSource`.
+
+Run your code.
+You should see 5&times;5 buttons without label.
+====
+
+The missing label is due to the fact that initially, the board is empty.
+In other words, the `IEnumerable<IEnumerable<Stone>>` is populated with nothing but `null` values.
+
+== Drawing Stones
+
+=== Placing Stones
+
+Next, we want to visualize our stones.
+For this, we need to first add stones to the game board.
+
+[NOTE,caption={task-caption}]
+====
+In `MainWindow.xaml.cs`, use the game's `PutStone` method to add some stones, at least two to have both black and white stones.
+Note that the `IGame` object is stateless, meaning you cannot modify it.
+`PutStone` returns a *new* `IGame` object instead of modifying it.
+
+Run your code.
+If you did it correctly, you should see buttons containing `W` or `B`.
+====
+
+The `W` and `B` appear because we're asking WPF to draw `Stone` objects, but these are unknown to WPF.
+In such cases, WPF chooses to call to `ToString()` method and render the result.
+If you look at the implementation of `Stone`, you will see that the `ToString()` method does indeed return `B` or `W`, depending on the color of the stone.
+
+=== Circles
+
+Right now, we draw each square using
+
+[source,xaml]
+----
+<Button Content="{Binding .}" Width="32" Height="32" />
+----
+
+In other words, we tell the `Button` that its contents are equal to its `DataContext`, which itself is equal to a `Stone`.
+Given that WPF has no clue about how to draw ``Stone``s, we need to help it out a bit.
+
+[NOTE,caption={task-caption}]
+====
+In `MainWindow.xaml`, change the button to
+
+[source,xaml]
+----
+<Button Width="32" Height="32">
+    <Ellipse Width="24" Height="24" Fill="Red" />
+</Button>
+----
+
+Run the code.
+Every button should now contain a small red circle.
+====
+
+=== StoneConverter
+
+Next step is to have the ``Ellipse``'s `Fill` vary according to which stone is there:
+
+[.center,cols="^,^",options="header",width="40%"]
+|===
+| Stone | Fill Brush
+| `Stone.WHITE` | White
+| `Stone.BLACK` | Black
+| `null` | Transparent
+|===
+
+To convert from `Stone` to `Brush`, we need to create an `IValueConverter`.
+
+[NOTE,caption={task-caption}]
+====
+* Add a new folder named `Converters` to your View project.
+* Add a new class file named `StoneConverter.cs` to this folder.
+* Have `StoneConverter` implement `IValueConverter`.
+* In the `Convert` method
+** The first parameter `value` corresponds to the stone.
+   It has type `object`, but that's not a problem.
+   We will be comparing references, meaning we don't need access to `Stone` specific functionality.
+** If `value == Stone.BLACK`, return `Brushes.Black`.
+** If `value == Stone.WHITE`, return `Brushes.White`.
+** If `value == null`, return `Brushes.Transparent`.
+====
+
+We can now use this converter.
+
+[NOTE,caption={task-caption}]
+====
+In `MainWindow.xaml`:
+
+* We want to access `StoneConverter`, which resides in the `View.Converters` namespace.
+  For this, we need to add an extra namespace mapping.
+  Add the following attribute to `Window` (the top element):
++
+[source,diff]
+----
+  <Window ...
+          xmlns:local="clr-namespace:View"
++         xmlns:converters="clr-namespace:View.Converters"
+          ...>
+----
+* Create the `StoneConverter` as a resource.
++
+[source,diff]
+----
+  <Window ...>
++     <Window.Resources>
++         <converters:StoneConverter x:Key="stoneToBrushConverter" />
++     </Window.Resources>
+      ...
+  </Window>
+----
+* Bind `Fill` to the `DataContext` itself. Have it use `stoneToBrushConverter` as converter.
+
+Run your code.
+If you did everything correctly, you should see circles with the correct color.
+====
+
+=== Generalizing StoneConverter
+
+Hardcoding the colors in `StoneConverter` is actually a bad idea:
+
+* We can easily generalize it so that it becomes reusable.
+* The color of the stones should be determined by an artist, not a programmer.
+  Specifying the color in C# code is not very artist-friendly: they'd rather define everything in XAML.
+* If we need more elaborate brushes, it's easier to define them in XAML than in C#.
+
+So let us improve our `StoneConverter`.
+
+[NOTE,caption={task-caption}]
+====
+In `StoneConverter`:
+
+* Add three properties `White`, `Black` and `Empty`. Each has type `object` and has both a getter and setter.
+* In the `Convert` method, return the values of `White`, `Black` and `Empty` instead of hardcoded brushes.
+
+In `MainWindow.xaml`, initialize the three properties of the `StoneConverter`.
+[source,diff]
+----
+  <Window ...>
+      <Window.Resources>
+-         <converters:StoneConverter x:Key="stoneToBrushConverter" />
++         <converters:StoneConverter x:Key="stoneToBrushConverter"
++                                    White="White"
++                                    Black="Black"
++                                    Empty="Transparent" />
+      </Window.Resources>
+      ...
+  </Window>
+----
+
+Run your code and check that everything works as intended.
 ====
