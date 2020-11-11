@@ -663,3 +663,123 @@ We're finally done with refactoring and can again start adding new functionality
 
 == Placing Stones
 
+=== PutStoneCommand
+
+We would like to be able to add stones to the game board by clicking on the corresponding button.
+This can be achieved by adding a command to the `GameBoardSquareViewModel`.
+Let's start small.
+
+[NOTE,caption={task-caption}]
+====
+* In the ViewModel, define a `PutStoneCommand` class that implements `ICommand`.
+* Have the `Execute` method print a debug message.
++
+[source,csharp]
+----
+Debug.WriteLine("You clicked me");
+----
+* `CanExecute` can for now always return `true`.
+* In `GameBoardSquareViewModel`, add a `PutStone` property of type `ICommand`, getter only.
+* Initialize this `PutStone` property in the constructor.
+* In `MainWindow.xaml`, update the `Button` so that pressing it invokes `PutCommand`.
+
+Run it.
+Whenever you click a button, `You clicked me` should appear in the output pane.
+====
+
+=== Passing Along IGame
+
+We would like to implement ``PutStoneCommand``'s ``Execute` method, but we run into a number of issues.
+We'll deal with each in turn.
+
+The functionality for placing stones resides in the `PutStone` method of `IGame`.
+This means `PutStoneCommand` would need access to the `IGame`, but currently it only receives a measly `Stone`.
+However, we know the `GameViewModel` object holds the `IGame`.
+We will have to pass it along to all intermediate ViewModel classes so that the `IGame` might reach `PutStoneCommand`.
+
+As always, let's do this step by step.
+
+[NOTE,caption={task-caption}]
+====
+Currently, `GameBoardViewModel` receives only an `IGameBoard`.
+
+* Its constructor should receive an `IGame` instead of an `IGameBoard`.
+* In the constructor, retrieve the `IGameBoard` from the `IGame`.
+
+Note that `GameBoardViewModel` does *not* need to save the `IGame` itself in a field; saving the `IGameBoard` is sufficient.
+
+Run your code after this step.
+Everything should still work.
+====
+
+[NOTE,caption={task-caption}]
+====
+Next, we need to let `BoardGameViewModel` pass the `IGame` along to `BoardGameRowViewModel`.
+Add an extra `IGame` parameter to its constructor and update `BoardGameViewModel` accordingly.
+Right now, `BoardGameViewModel` doesn't need to do anything with this `IGame`.
+
+Run your code and check that everything works.
+====
+
+[NOTE,caption={task-caption}]
+====
+Now we have `BoardGameRowViewModel` pass the `IGame` to `BoardGameSquareViewModel.`
+At this stage, `BoardGameSquareViewModel` needn't do anything with the `IGame`.
+
+Again, run your code.
+====
+
+[NOTE,caption={task-caption}]
+====
+Finally, have `BoardGameSquareViewModel` give the `IGame` to `PutStoneCommand`.
+`PutStoneCommand` will have to store the `IGame` in a field.
+
+Yes, run your code, yet again.
+====
+
+=== Square Position
+
+Now that `PutStoneCommand` finally has access to the `IGame`, we should be able to call its `PutStone` method.
+However, there's a catch: the `PutStone` method needs to know _where_ to place the stone.
+Right now, `PutStoneCommand` has no clue about which square on the board it is associated with.
+
+It is important to realize that there as many `PutStoneCommand` objects as there are squares on the board: each button in the view has its very own `PutStoneCommand`.
+This means we can tell each such object where it is positioned.
+
+[NOTE,caption={task-caption}]
+====
+Let's start at the bottom first, i.e., `PutStoneCommand`.
+
+* Add a `Vector2D` field named `position` to `PutStoneCommand`.
+* Add an extra constructor parameter.
+
+We go up one level, to `GameBoardSquareViewModel`.
+It represents one square, so it makes sense for it to also have a position associated with it.
+
+* Add a new constructor parameter `Vector2D position`.
+* Remove the `Stone owner` parameter.
+  Instead, let the constructor itself look up the stone using the provided `IGame` and `Vector2D`.
+* Pass the position along to the `PutStoneCommand` constructor.
+
+Now it's ``GameBoardRowViewModel``'s turn.
+Since it is a full row, we can only give it its `y` coordinate.
+
+* Have the constructor accept only an `IGame game` and an `int y`.
+  This information should be sufficient to initialize its `Squares` property: for each square on row `y` of `game.Board`, it must create `GameBoardSquareViewModel`.
+
+Lastly, `GameBoardViewModel`.
+
+* Update this class so that it gives each `BoardGameRowViewModel` its corresponding `y` coordinate.
+
+Run your code and check that everything still works.
+====
+
+We'd like to make sure each `PutStoneCommand` does indeed receive its position.
+Let's make a quick change to check this.
+
+[NOTE,caption={task-caption}]
+====
+Have `PutStoneCommand` print its position instead of `You clicked me`.
+
+Run the program, click on buttons and check that the right coordinates are outputted.
+====
