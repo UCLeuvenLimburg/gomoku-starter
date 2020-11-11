@@ -11,6 +11,12 @@
 
 = Getting Started
 
+[IMPORTANT]
+====
+Make sure to regularly commit your changes to the repository.
+This will allow you to experiment with an easy mind: if things go wrong, you can easily reset it to the last known working version.
+====
+
 == Setting Up Visual Studio
 
 [NOTE,caption={task-caption}]
@@ -652,3 +658,8 @@ Introduce a class `GameBoardSquareViewModel`.
 
 Run it and check that nothing has changed.
 ====
+
+We're finally done with refactoring and can again start adding new functionality.
+
+== Placing Stones
+
