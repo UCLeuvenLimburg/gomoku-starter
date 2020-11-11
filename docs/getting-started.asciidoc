@@ -586,6 +586,8 @@ Right now, the `GameViewModel` actually represents the board.
 We would like to distinguish the game from its game board.
 Let's create a separate `GameBoardViewModel` class.
 
+image::itemscontrol-gamevm-boardvm.svg[Static,700,align="center"]
+
 [NOTE,caption={task-caption}]
 ====
 In the ViewModel, introduce a class `GameBoardViewModel`.
@@ -600,4 +602,10 @@ Update `GameViewModel`:
 
 Do not have the `Board` getter create a new `GameBoardViewModel` each time.
 Make sure to create it only once, namely in the constructor, and have `Board` return it.
+
+Lastly, update the `ItemsSource` binding:
+
+* It starts off in the `DataContext`, which is a `GameViewModel`.
+* The binding needs to first go to its `Board` property.
+* Next, it must dig deeper to the board's `Rows` property.
 ====
