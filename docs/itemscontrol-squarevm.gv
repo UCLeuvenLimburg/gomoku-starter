@@ -31,12 +31,20 @@ digraph G {
                   </TABLE>>
     ]
 
-    Data [label="IEnumerable\<Stone\>",shape=box]
+    SquareVM [
+        label =<<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="1" CELLPADDING="5">
+                      <TR><TD PORT="header"><B><U>BoardGameSquareViewModel</U></B></TD></TR>
+                      <TR><TD PORT="Owner">Owner</TD></TR>
+                  </TABLE>>
+    ]
+
+    Data [label="Stone",shape=box]
 
 
     ItemsControl:DataContext -> GameVM:header
     ItemsControl:ItemsSource -> GameVM:Board
     GameVM:Board -> BoardVM:header
     BoardVM:Rows -> RowVM:header [headlabel="*",labeldistance=1.5]
-    RowVM:Squares -> Data
+    RowVM:Squares -> SquareVM:header [headlabel="*",labeldistance=1.5]
+    SquareVM:Owner -> Data
 }

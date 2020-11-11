@@ -624,13 +624,31 @@ Next in line is a ViewModel representing a board row.
 Introduce a class `GameBoardRowViewModel`.
 
 * The constructor expects a `IEnumerable<Stone>`.
-* The `IEnumerable<Stone>` is exposed through a property named `Elements`.
+* The `IEnumerable<Stone>` is exposed through a property named `Squares`.
 * Update the `Rows` property of `GameBoardViewModel`: instead of returning `IEnumerable<IEnumerable<Stone>>`, it now returns a `IEnumerable<GameBoardRowViewModel>`.
 * Update the bindings of the inner ``ItemsControl``s.
-  Their `DataContext` has now changed from `IEnumerable<Stone>` to `GameBoardRowViewModel`, so the binding will need to access the `Elements` property of its `DataContext`.
+  Their `DataContext` has now changed from `IEnumerable<Stone>` to `GameBoardRowViewModel`, so the binding will need to access the `Squares` property of its `DataContext`.
 
 Run it and check that nothing has changed.
 ====
 
 image::itemscontrol-rowvm.svg[Static,700,align="center"]
 
+=== GameBoardSquareViewModel
+
+Lastly, we want a ViewModel object for each square of the grid.
+We will call this `GameBoardSquareViewModel`.
+
+image::itemscontrol-squarevm.svg[Static,700,align="center"]
+
+[NOTE,caption={task-caption}]
+====
+Introduce a class `GameBoardSquareViewModel`.
+
+* The constructor expects a `Stone`.
+* The `Stone` is exposed through a property named `Owner`.
+* Update `GameBoardRowViewModel` so that `Squares` returns an `IEnumerable<GameBoardSquareViewModel>` instead of an `IEnumerable<Stone>`.
+* Update the binding for ``Button``'s `Content` property.
+
+Run it and check that nothing has changed.
+====
