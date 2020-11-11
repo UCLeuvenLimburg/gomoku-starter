@@ -488,3 +488,52 @@ In `MainWindow.xaml`, initialize the three properties of the `StoneConverter`.
 
 Run your code and check that everything works as intended.
 ====
+
+== Introducing ViewModels
+
+As of yet, we have only written code in the View.
+It is time we clean up our design and refactor a bit by moving things to the ViewModel layer.
+
+ViewModel objects generally act as ``DataContext``s for GUI controls: they contain all information the control needs.
+The goal of this approach is to build a layered structure:
+
+* The ViewModel objects "passively" offers information through properties.
+* The View will fetch this ViewModel data through bindings.
+
+At no times should the ViewModel know anything about what exists on the View layer.
+
+=== Unnaming the ItemsControl
+
+The top level `ItemsControl` currently has a name: its `x:Name` property is set in the XAML code.
+We needed this to be able to initialize its `ItemsSource` in the `MainWindow` constructor:
+
+[source,csharp,highlight=10]
+----
+public MainWindow()
+{
+    InitializeComponent();
+
+    var game = IGame.Create(5, true);
+
+    game = game.PutStone(new Vector2D(0, 0));
+    game = game.PutStone(new Vector2D(1, 0));
+
+    this.boardView.ItemsSource = Rows(game.Board);
+}
+----
+
+This approach is not ideal: it stands in our way of introducing ViewModels.
+Instead, we would prefer that the control fetches its `ItemsSource` from its `DataContext` instead of us setting it explicitly in the code-behind.
+Fortunately, this is easy to fix.
+
+[NOTE,caption={task-caption}]
+====
+Instead of assigning the row data to ``boardView``'s `ItemsSource`, assign it to the ``MainWindow``'s `DataContext`.
+The `ItemsControl` will then inherit its `DataContext` from `MainWindow`.
+
+In the XAML file, remove the ``ItemsControl``'s name. Use a binding to set its `ItemsSource` to its `DataContext`.
+
+Run the code to check that everything still works.
+====
+
+
