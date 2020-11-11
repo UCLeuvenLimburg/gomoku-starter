@@ -783,3 +783,59 @@ Have `PutStoneCommand` print its position instead of `You clicked me`.
 
 Run the program, click on buttons and check that the right coordinates are outputted.
 ====
+
+=== Reactive Programming
+
+Now that `PutStoneCommand` has both the `IGame` object and its position, surely we're ready to make it work?
+Sadly, there's still one problem: ``IGame``'s `PutStone` does not modify the object, but returns a new one.
+We clearly need to do _something_ with this new `IGame` object, but what?
+
+The new `IGame` object contains an updated board.
+This means that all ``GameBoardSquareViewModel``s should update their `Owner` property.
+However, the `PutStoneCommand` object has no way of contacting each `GameBoardSquareViewModel`.
+We could of course give each `PutStoneCommand` object a list of all existing ``GameBoardSquareViewModel``s so that it can ask them to refresh themselves.
+Fortunately, there is a much easier solution.
+
+Note that not only do we need the ``GameBoardSquareViewModel``s to update their `Owner` property, we also need the View to be aware of this change.
+Without some kind of notification, the View will not know of this update and therefore not see any reason of updating itself.
+
+This is where Reactive Programming shows its strength.
+In short, Reactive Programming consists of having variables automatically update themselves whenever another variable changes.
+Consider this example:
+
+[source,csharp]
+----
+var x = 1;
+var doubleOfX = x * 2;
+x = 5;
+----
+
+After the execution of the last statement, `doubleOfX` will be equal to `2`, even though `x` equals `5`.
+Wouldn't it make more sense for `doubleOfX` to be `10`?
+
+The reason for this, of course, is that `doubleOfX` has been initialized at a time where `x` was still `1`.
+Changing `x` does not cause `doubleOfX` to be magically updated alongside with it.
+
+Reactive Programming involves creating variables that _do_ update themselves automatically.
+For example,
+
+[source,csharp]
+----
+var value = 1;
+var doubleOfX = value * 2; // doubleOfX == 2
+value = 5;                 // doubleOfX == 10
+value = 2;                 // doubleOfX == 4
+value = 7;                 // doubleOfX == 14
+----
+
+Unfortunately, Reactive Programming is not built into C#.
+This is where Cells come in: these can be used to "fake" Reactive Programming.
+
+[source,csharp]
+----
+var x = ICell.Create(1);
+var doubleOfX = x.Derive(x => x * 2); // doubleOfX.Value == 2
+x.Value = 5;                          // doubleOfX.Value == 10
+x.Value = 2;                          // doubleOfX.Value == 4
+x.Value = 7;                          // doubleOfX.Value == 14
+----
