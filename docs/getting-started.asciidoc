@@ -610,7 +610,7 @@ Lastly, update the `ItemsSource` binding:
 
 * It starts off in the `DataContext`, which is a `GameViewModel`.
 * The binding needs to first go to its `Board` property.
-* Next, it must dig deeper to the board's `Rows` property.
+  Then it must dig on step deeper to the board's `Rows` property.
 
 Run it and check that nothing has changed.
 ====
@@ -633,3 +633,4 @@ Run it and check that nothing has changed.
 ====
 
 image::itemscontrol-rowvm.svg[Static,700,align="center"]
+
