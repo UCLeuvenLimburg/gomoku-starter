@@ -54,7 +54,9 @@ def compile_graphviz
             from_path = root + relative_path
             to_path = dist + relative_path
 
-            puts `dot -Tsvg #{from_path.expand_path} -o #{to_path.expand_path.sub_ext('.svg')}`
+            puts "#{from_path} -> #{to_path}"
+            output = `dot -Tsvg #{from_path.expand_path} -o #{to_path.expand_path.sub_ext('.svg')}`.strip
+            puts output if output.size > 0
         end
     end
 end
