@@ -600,12 +600,34 @@ Update `GameViewModel`:
 * Introduce a public property `Board` of type `GameBoardViewModel`, getter-only.
 * Initialize this property in the constructor.
 
+[IMPORTANT]
+=====
 Do not have the `Board` getter create a new `GameBoardViewModel` each time.
 Make sure to create it only once, namely in the constructor, and have `Board` return it.
+=====
 
 Lastly, update the `ItemsSource` binding:
 
 * It starts off in the `DataContext`, which is a `GameViewModel`.
 * The binding needs to first go to its `Board` property.
 * Next, it must dig deeper to the board's `Rows` property.
+
+Run it and check that nothing has changed.
 ====
+
+=== GameBoardRowViewModel
+
+Next in line is a ViewModel representing a board row.
+
+[NOTE,caption={task-caption}]
+====
+Introduce a class `GameBoardRowViewModel`.
+
+* The constructor expects a `IEnumerable<Stone>`.
+* The `IEnumerable<Stone>` is exposed through a property named `Elements`.
+* Update the bindings of the inner ``ItemsControl``s.
+  Their `DataContext` has now changed from `IEnumerable<Stone>` to `GameBoardRowViewModel`, so the binding will need to access the `Elements` property of its `DataContext`.
+
+Run it and check that nothing has changed.
+====
+
