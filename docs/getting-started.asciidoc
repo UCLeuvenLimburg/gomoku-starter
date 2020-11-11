@@ -923,3 +923,15 @@ It is now time for you to introduce cells in your code.
 
 Run your code and check that everything still works the same.
 ====
+
+=== Making it Work
+
+We are finally ready to place stones on the board.
+
+[NOTE,caption={task-caption}]
+====
+In ``PutStoneCommand``'s `Execute` method, call the ``IGame``'s `PutStone` and store its result back into the cell.
+
+Run the code.
+You should be able to place stones.
+====
