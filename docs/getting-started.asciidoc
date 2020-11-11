@@ -821,21 +821,105 @@ For example,
 
 [source,csharp]
 ----
-var value = 1;
-var doubleOfX = value * 2; // doubleOfX == 2
-value = 5;                 // doubleOfX == 10
-value = 2;                 // doubleOfX == 4
-value = 7;                 // doubleOfX == 14
+var x = 1;
+var doubleOfX = x * 2; // doubleOfX == 2
+x = 5;                 // doubleOfX == 10
+x = 2;                 // doubleOfX == 4
+x = 7;                 // doubleOfX == 14
 ----
 
-Unfortunately, Reactive Programming is not built into C#.
+However, Reactive Programming is not built into C#.
 This is where Cells come in: these can be used to "fake" Reactive Programming.
 
 [source,csharp]
 ----
-var x = ICell.Create(1);
-var doubleOfX = x.Derive(x => x * 2); // doubleOfX.Value == 2
+var x = Cell.Create(1);
+var doubleOfX = x.Derive(k => k * 2); // doubleOfX.Value == 2
 x.Value = 5;                          // doubleOfX.Value == 10
 x.Value = 2;                          // doubleOfX.Value == 4
 x.Value = 7;                          // doubleOfX.Value == 14
 ----
+
+Here, `Derive` creates a new cell that is kept in sync with the original cell.
+The lambda `k => k * 2` expresses how `doubleOfX` is related to `x`:
+
+* The parameter `k` contains the value of the original cell (`x`).
+* The body `k * 2` tells how to compute the derived cell's value (`doubleOfX`).
+
+Let's see how we can leverage Reactive Programming in the case of Gomoku.
+
+=== Cell
+
+Say we start off with an `ICell<IGame>` in which we store the current game state.
+
+[source,csharp]
+----
+var currentGame = Cell.Create(IGame.Create(5, true));
+----
+
+From this we can derive the game board:
+
+[source,csharp]
+----
+var currentGameBoard = currentGame.Derive(g => g.Board);
+----
+
+We can then create a derived cell that contains the stone in the upper left corner of the board:
+
+[source,csharp]
+----
+var upperLeftCorner = currentGameBoard.Derive(b => b[new Vector2D(0,0)]);
+----
+
+Initially, `upperLeftCorner.Value` will equal `null`, since no stone occupies that square.
+Say we put a stone there:
+
+[source,csharp]
+----
+// Black's turn
+currentGame.Value = currentGame.Value.PutStone( new Vector2D(0, 0) );
+----
+
+It is important that you understand what is going on here:
+
+* We retrieve the current game from the cell: `currentGame.Value` in the right side of the assignment.
+* We call `PutStone` on this `IGame` object.
+* This returns a new `IGame` object.
+* We store this new `IGame` object in the `currentGame` cell.
+* The change in `currentGame` causes `currentGameBoard` to be updated.
+* `upperLeftCorner` is aware of this change and fetches its new value from the board: `Stone.BLACK`.
+
+We can create one derived cell per square and wrap each one in a `BoardGameSquareViewModel` object.
+
+image::game-cell.svg[Static,600,align="center"]
+
+Using cells takes care of two issues at once:
+
+* We don't need to manually update all ``BoardGameSquareViewModel``s `Owner` property anymore: this is done automatically by derived cells.
+* WPF "understands" cells (because they implement the `INotifyPropertyChanged` interface). Whenever a cell's value changes, WPF will know that it will need to rerender the view.
+
+It is now time for you to introduce cells in your code.
+
+[NOTE,caption={task-caption}]
+====
+* `GameViewModel`
+** Its constructor receives an `IGame` and stores it in a field with type `IGame`.
+** Change the field type to `ICell<IGame>` and update the constructor correspondingly.
+   Note that the parameter type should remain simply `IGame`.
+* `GameBoardViewModel`
+** In `GameBoardViewModel`, update the `board` field's type from `IGameBoard` to `ICell<IGameBoard>`.
+** Its constructor should now accept an `ICell<IGame>` instead of an `IGame`.
+** From this cell, derive an `ICell<IGameBoard>` and store it in the field.
+* `GameBoardRowViewModel`
+** Its constructor should now receive an `ICell<IGame>`.
+* `GameBoardSquareViewModel`
+** The constructor receives an `ICell<IGame>`.
+** Change the `Owner` property's type to `ICell<Stone>`.
+** In the constructor, initialize it to a derived cell that contains the `Stone` at the appropriate position.
+* `PutStoneCommand`
+** Its constructor should also receive the `ICell<IGame>` and store it in a field.
+* XAML code
+** Update the `Fill` binding. Since we upgraded `Owner` from `Stone` to `ICell<Stone>`, the binding needs to change from `Owner` to `Owner.Value`.
+
+Run your code and check that everything still works the same.
+====

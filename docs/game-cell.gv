@@ -1,0 +1,44 @@
+digraph G {
+    node [shape=none,fontname=Consolas,margin="0.3,0.1"]
+    rankdir=LR
+
+    GameVM [
+      label =<<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="1" CELLPADDING="5">
+                      <TR><TD PORT="header"><B><U>GameViewModel</U></B></TD></TR>
+                      <TR><TD PORT="game">ICell&lt;IGame&gt;</TD></TR>
+                  </TABLE>>
+    ]
+
+    BoardVM [
+      label =<<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="1" CELLPADDING="5">
+                      <TR><TD PORT="header"><B><U>GameBoardViewModel</U></B></TD></TR>
+                      <TR><TD PORT="Board">ICell&lt;IGameBoard&gt;</TD></TR>
+                  </TABLE>>
+    ]
+
+    SquareVM1 [
+      label =<<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="1" CELLPADDING="5">
+                      <TR><TD PORT="header"><B><U>BoardGameSquareViewModel</U></B></TD></TR>
+                      <TR><TD PORT="Stone">ICell&lt;Stone&gt;</TD></TR>
+                  </TABLE>>
+    ]
+
+    SquareVM2 [
+      label =<<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="1" CELLPADDING="5">
+                      <TR><TD PORT="header"><B><U>BoardGameSquareViewModel</U></B></TD></TR>
+                      <TR><TD PORT="Stone">ICell&lt;Stone&gt;</TD></TR>
+                  </TABLE>>
+    ]
+
+    SquareVM3 [
+      label =<<TABLE BORDER="2" CELLBORDER="0" CELLSPACING="1" CELLPADDING="5">
+                      <TR><TD PORT="header"><B><U>BoardGameSquareViewModel</U></B></TD></TR>
+                      <TR><TD PORT="Stone">ICell&lt;Stone&gt;</TD></TR>
+                  </TABLE>>
+    ]
+
+    GameVM:game -> BoardVM:board
+    BoardVM:board -> SquareVM1:Stone
+    BoardVM:board -> SquareVM2:Stone
+    BoardVM:board -> SquareVM3:Stone
+}
