@@ -625,9 +625,11 @@ Introduce a class `GameBoardRowViewModel`.
 
 * The constructor expects a `IEnumerable<Stone>`.
 * The `IEnumerable<Stone>` is exposed through a property named `Elements`.
+* Update the `Rows` property of `GameBoardViewModel`: instead of returning `IEnumerable<IEnumerable<Stone>>`, it now returns a `IEnumerable<GameBoardRowViewModel>`.
 * Update the bindings of the inner ``ItemsControl``s.
   Their `DataContext` has now changed from `IEnumerable<Stone>` to `GameBoardRowViewModel`, so the binding will need to access the `Elements` property of its `DataContext`.
 
 Run it and check that nothing has changed.
 ====
 
+image::itemscontrol-rowvm.svg[Static,700,align="center"]
