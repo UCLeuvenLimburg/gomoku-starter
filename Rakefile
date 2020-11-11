@@ -2,6 +2,10 @@ require 'fileutils'
 require 'pathname'
 require 'find'
 
+def plantuml
+
+end
+
 def is_root?(filename)
     %r{// ROOT} =~ IO.readlines(filename).first
 end
@@ -19,14 +23,14 @@ def compile_asciidoc
 end
 
 def should_copy?(path)
-    path.end_with? '.svg'
+    false
 end
 
 def copy_images
-    Find.find('docs') do |entry|
-        root = Pathname.new 'docs'
-        dist = Pathname.new 'dist'
+    root = Pathname.new 'docs'
+    dist = Pathname.new 'dist'
 
+    Find.find('docs') do |entry|
         if should_copy? entry
             path = Pathname.new entry
             relative_path = path.relative_path_from(root)
@@ -39,13 +43,30 @@ def copy_images
     end
 end
 
+def compile_graphviz
+    root = Pathname.new 'docs'
+    dist = Pathname.new 'dist'
+
+    Find.find('docs') do |entry|
+        if entry.end_with? '.gv'
+            path = Pathname.new entry
+            relative_path = path.relative_path_from root
+            from_path = root + relative_path
+            to_path = dist + relative_path
+
+            puts `dot -Tsvg #{from_path.expand_path} -o #{to_path.expand_path.sub_ext('.svg')}`
+        end
+    end
+end
+
 task :clean do
     FileUtils.rm_rf 'dist'
 end
 
 task :build do
     compile_asciidoc
-    copy_images
+    compile_graphviz
+    #copy_images
 end
 
 task :upload do
