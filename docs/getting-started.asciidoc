@@ -546,6 +546,13 @@ Let's see what ``DataContext``s we have.
 * Each button has a single `Stone` as `DataContext`.
 
 Let's wrap each of these in ViewModel objects, one at a time, starting with the top level `ItemsControl`.
+Our current situation is
+
+image::itemscontrol-directbinding.svg[Static,400,align="center"]
+
+Our goal is to reorganize this as follows:
+
+image::itemscontrol-gamevm.svg[Static,600,align="center"]
 
 [NOTE,caption={task-caption}]
 ====
@@ -594,4 +601,3 @@ Update `GameViewModel`:
 Do not have the `Board` getter create a new `GameBoardViewModel` each time.
 Make sure to create it only once, namely in the constructor, and have `Board` return it.
 ====
-
