@@ -573,4 +573,25 @@ As always, run the code.
 The same 5 &times; 5 grid of buttons should still appear.
 ====
 
+=== GameBoardViewModel
+
+Right now, the `GameViewModel` actually represents the board.
+We would like to distinguish the game from its game board.
+Let's create a separate `GameBoardViewModel` class.
+
+[NOTE,caption={task-caption}]
+====
+In the ViewModel, introduce a class `GameBoardViewModel`.
+
+* The constructor expects a `IGameBoard` object, which it stores in a private field.
+* Move the `Rows` property (and its helper methods, if any) from `GameViewModel` to `GameBoardViewModel`.
+
+Update `GameViewModel`:
+
+* Introduce a public property `Board` of type `GameBoardViewModel`, getter-only.
+* Initialize this property in the constructor.
+
+Do not have the `Board` getter create a new `GameBoardViewModel` each time.
+Make sure to create it only once, namely in the constructor, and have `Board` return it.
+====
 
