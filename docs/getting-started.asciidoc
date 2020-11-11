@@ -536,4 +536,41 @@ In the XAML file, remove the ``ItemsControl``'s name. Use a binding to set its `
 Run the code to check that everything still works.
 ====
 
+=== GameViewModel
+
+As explained earlier, ``DataContext``s should be set to ViewModel objects.
+Let's see what ``DataContext``s we have.
+
+* The top level ``ItemsControl``'s `DataContext` is set to the grid data, i.e., an `IEnumerable<IEnumerable<Stone>>`.
+* The inner ``ItemsControl``s each receive an `IEnumerable<Stone>` as `DataContext`.
+* Each button has a single `Stone` as `DataContext`.
+
+Let's wrap each of these in ViewModel objects, one at a time, starting with the top level `ItemsControl`.
+
+[NOTE,caption={task-caption}]
+====
+In The ViewModel, introduce a class `GameViewModel`.
+We intend this class to contain all game related data.
+For now, we will limit ourselves to have it expose the board so that the View can render its grid of buttons.
+
+* Have the constructor accept an `IGame` object and have it stored in a private field.
+* The top level `ItemsControl` needs rows, so introduce a public `Rows` property.
+  It must have type `IEnumerable<IEnumerable<Stone>>`.
+  It should be only gettable, not settable.
+* You might want to bring along the `Row` helper method that extracts a single row from the board.
+
+Next, update the `MainWindow` constructor.
+
+* Keep the code that creates the `IGame` object and puts some stones around.
+* Create a `GameViewModel` object and initialize it with the `IGame` object.
+* Assign this `GameViewModel` object to the ``MainWindow``'s `DataContext`.
+* Remove the `Row` and `Rows` methods from the `MainWindow` class, that functionality has been moved to `GameViewModel`.
+
+Finally, in the XAML file, update the ``ItemsControl``'s `ItemsSource` binding.
+It used to receive the rows directly as `DataContext`, but now they are stored inside a `GameViewModel`object's `Rows` property.
+
+As always, run the code.
+The same 5 &times; 5 grid of buttons should still appear.
+====
+
 
