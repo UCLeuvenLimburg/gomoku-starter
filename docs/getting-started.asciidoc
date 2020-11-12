@@ -1007,5 +1007,5 @@ In ``GameBoardSquareViewModel``'s constructor
   Look in `IGame` for a method that could prove useful.
 
 Run your code.
-The application should not crash anymore when attemption to place a stone on an already occupied square.
+The application should not crash anymore when attempting to place a stone on an already occupied square.
 ====
