@@ -23,3 +23,4 @@ For this project, you will develop a GUI for Gomoku, a board game.
 * <<setup.asciidoc#,Setup Instructions>>
 * <<gomoku-rules.asciidoc#,Game Rules>>
 * <<getting-started.asciidoc#,Getting Started>>
+* <<requirements.asciidoc#,Requirements>>
