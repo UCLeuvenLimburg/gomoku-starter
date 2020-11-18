@@ -55,4 +55,3 @@ $ git pull upstream master
 It is your responsibility to download updates as they become available.
 You can ask GitHub to notify you whenever an update is made to the repository using the watch functionality (top right corner) provided on the https://github.com/UCLeuvenLimburg/gomoku-starter[repository's website].
 ====
-
