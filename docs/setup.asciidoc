@@ -34,6 +34,7 @@ If you were to lose your hard work and have failed to push your code frequently,
 ## Receiving Updates
 
 In order to receive updates, you need to link your repository to my original repository.
+Inside your local repository (i.e., inside the `gomoku` directory):
 
 [source,bash]
 ----
