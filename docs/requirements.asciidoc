@@ -68,3 +68,4 @@ We suggest to make some extra extensions as a safety measure.
 * Animation (NOT gifs, but WPF animations)
 * Timer
 * Let players choose colors in settings screen
+* User Defined WPF Control for Stones
