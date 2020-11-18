@@ -9,28 +9,57 @@
 :experimental:
 :nofooter:
 
-# Requirements
+= Requirements
 
-## Minimal Functional Requirements
+[IMPORTANT]
+====
+This is still work in progress.
+====
 
-* No crashes
-* At least two screens
-** Settings screen
-** Play screen
-* Settings Screen
-** Slider + TextBlock that allow to choose board size
-** Min/max values of slides should be determined by model, not hardcoded in V or VM
-** Checkbox that allows to enable capturing
-** Button to start new game and switch to Play Screen
-* Play Screen
-** Ability to place stones
-** Invalid moves are prevented
-** Indication of current player
-** Forbidden moves due to capturing are shown
-** Detection of end of game: message with winner is shown
-** Possibility of starting new game after game over
+== Minimal Requirements
 
-## Extensions
+Not satisfying all requirements listed below will lead to a failing grade.
+
+== Minimal Functional Requirements
+
+. No crashes
+. At least two screens
+.. Settings screen
+.. Play screen
+. Settings Screen
+.. Slider + TextBlock that allow to choose board size
+.. Min/max values of slides should be determined by model, not hardcoded in V or VM
+.. Checkbox that allows to enable capturing
+.. Button to start new game and switch to Play Screen
+. Play Screen
+.. Ability to place stones
+.. Invalid moves are prevented
+.. Indication of current player
+.. Forbidden moves due to capturing are shown
+.. Detection of end of game: message with winner/tie is shown
+.. Possibility of starting new game after game over
+. Decent GUI
+.. Game board fills the window
+.. Game board is centered
+. At least 3 extensions
+
+== Implementation Requirements
+
+. The VM *must* be 100% independent of the V and WPF.
+  Check your project dependencies!
+. The M must remain independent of all other projects.
+. The V must receive all its data through bindings to the VM.
+. Do not deal with events (e.g., `Click`) in the code behind but rely on commands in the VM.
+. The VM/M must not make *any* View-related decisions.
+.. No brushes/colors/... are allowed in the VM.
+.. The VM must not contain strings that are shown in the V.
+. No hard coded file paths
+. No external libraries
+
+== Extension Suggestions
+
+If an extension is implemented wrong, it will not be counted.
+We suggest to make some extra extensions as a safety measure.
 
 * In Play Screen, when mouse hovers over square, it lights up
 * After winning, highlight winning squares
@@ -38,16 +67,4 @@
 * Undoing moves
 * Animation (NOT gifs, but WPF animations)
 * Timer
-
-## Implementation Requirements
-
-. The VM *must* be 100% independent of the V and WPF.
-  Check your project dependencies!
-* The M must remain independent of all other projects.
-. The V must receive all its data through bindings to the VM.
-. Do not deal with events (e.g., `Click`) in the code behind but rely on commands in the VM.
-. The VM/M must not make *any* View-related decisions.
-.. No brushes/colors are allowed in the VM.
-.. The VM must not contain strings that are shown in the V.
-. No hard coded paths
-. No external libraries
+* Let players choose colors in settings screen
