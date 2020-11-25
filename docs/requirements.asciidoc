@@ -66,7 +66,7 @@ We suggest to make some extra extensions as a safety measure.
 * After winning, highlight winning squares
 * Choice between themes (e.g. dark and light theme)
 * Undoing moves
-* Animation (NOT gifs, but WPF animations)
+* <<#animation,Animation>> (NOT gifs, but WPF animations)
 * Timer
 * Let players choose colors in settings screen
 * User Defined WPF Control for Stones
@@ -89,7 +89,7 @@ A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Sample
 [#viewbox]
 === ViewBox
 
-Look up `ViewBox` for an easy way to automatically scale your view.
+Look up https://docs.microsoft.com/en-us/dotnet/desktop/wpf/controls/viewbox[ViewBox] for an easy way to automatically scale your view.
 
 [#dependencies]
 === Project dependencies
@@ -98,13 +98,12 @@ In Visual Studio's Solution Explorer, you get a tree view of all your projects.
 Under each project, you can see its dependencies.
 It is of utmost importance that you get these right.
 
+* The View project
+** Framework dependencies: .NET Core and WPF.
+** Project dependencies: Cells, Model, ViewModel
 * The ViewModel project
 ** Framework dependencies: it can depend on .NET Core, but *not* on WPF.
 ** Project dependencies: only Cells and Model are allowed.
-* The View project: since this project corresponds to your application specifically, you can technically have all dependencies you want.
-  Typically, this would be
-** Framework dependencies: .NET Core and WPF.
-** Project dependencies: Cells, Model, ViewModel
 * The Model Project
 ** Framework Project: .NET Core
 ** Project dependencies: none
@@ -128,3 +127,8 @@ This can be done by right clicking on the external file in the Solution Explorer
 
 Alternatively, you can also pack your external files into the executable file.
 You will need https://docs.microsoft.com/en-us/dotnet/desktop/wpf/app-development/pack-uris-in-wpf?view=netframeworkdesktop-4.8[pack URIs] to refer to them.
+
+=== Animations
+
+* https://docs.microsoft.com/en-us/dotnet/desktop/wpf/graphics-multimedia/animation-overview[Official documentation]
+* A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].
