@@ -18,7 +18,7 @@ This is still work in progress.
 
 == Minimal Requirements
 
-Not satisfying all requirements listed below will lead to a failing grade.
+Failure to meet these requirements will inevitably lead to a failing grade.
 
 === Minimal Functional Requirements
 
@@ -46,14 +46,14 @@ Not satisfying all requirements listed below will lead to a failing grade.
 === Implementation Requirements
 
 . The VM *must* be 100% independent of the V and WPF.
-  Check your project dependencies!
+  Check your <<#dependencies,project dependencies>>!
 . The M must remain independent of all other projects.
 . The V must receive all its data through bindings to the VM.
 . Do not deal with events (e.g., `Click`) in the code behind but rely on commands in the VM.
 . The VM/M must not make *any* View-related decisions.
 .. No brushes/colors/... are allowed in the VM.
 .. The VM must not contain strings that are shown in the V.
-. No hard coded file paths
+. <<#external-files,No hard coded absolute paths>>
 . No external libraries
 
 [#extensions]
@@ -90,3 +90,41 @@ A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Sample
 === ViewBox
 
 Look up `ViewBox` for an easy way to automatically scale your view.
+
+[#dependencies]
+=== Project dependencies
+
+In Visual Studio's Solution Explorer, you get a tree view of all your projects.
+Under each project, you can see its dependencies.
+It is of utmost importance that you get these right.
+
+* The ViewModel project
+** Framework dependencies: it can depend on .NET Core, but *not* on WPF.
+** Project dependencies: only Cells and Model are allowed.
+* The View project: since this project corresponds to your application specifically, you can technically have all dependencies you want.
+  Typically, this would be
+** Framework dependencies: .NET Core and WPF.
+** Project dependencies: Cells, Model, ViewModel
+* The Model Project
+** Framework Project: .NET Core
+** Project dependencies: none
+
+[#external-files]
+=== External Files
+
+Your project should run without issues on other machines.
+Do not use any hardcoded absolute paths, since these will only work on _your_ machine.
+
+==== Separate Files
+
+If you wish to refer to external files, you should use relative paths.
+
+When using a relative path, e.g. `images/background.jpg`, your application starts looking starting at the location of the executable file, which is normally located somewhere under `bin/debug`.
+Do *not* move your external files there.
+Instead, place them in the project's root directory and have Visual Studio copy them to `bin/debug`.
+This can be done by right clicking on the external file in the Solution Explorer, picking properties, and then setting `Copy to Output Directory` to `Always`.
+
+==== Pack URIs
+
+Alternatively, you can also pack your external files into the executable file.
+You will need https://docs.microsoft.com/en-us/dotnet/desktop/wpf/app-development/pack-uris-in-wpf?view=netframeworkdesktop-4.8[pack URIs] to refer to them.
