@@ -453,7 +453,8 @@ In `MainWindow.xaml`:
       ...
   </Window>
 ----
-* Bind `Fill` to the `DataContext` itself. Have it use `stoneToBrushConverter` as converter.
+* Bind `Fill` to the `DataContext` itself.
+  Have it https://docs.microsoft.com/en-us/dotnet/desktop/wpf/advanced/staticresource-markup-extension[use] `stoneToBrushConverter` as converter.
 
 Run your code.
 If you did everything correctly, you should see circles with the correct color.

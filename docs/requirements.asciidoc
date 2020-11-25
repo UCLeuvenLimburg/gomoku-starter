@@ -20,10 +20,10 @@ This is still work in progress.
 
 Not satisfying all requirements listed below will lead to a failing grade.
 
-== Minimal Functional Requirements
+=== Minimal Functional Requirements
 
-. No crashes
-. At least two screens
+. <<#crashes,No crashes>>
+. At least <<#screens,two screens>>
 .. Settings screen
 .. Play screen
 . Settings Screen
@@ -39,11 +39,11 @@ Not satisfying all requirements listed below will lead to a failing grade.
 .. Detection of end of game: message with winner/tie is shown
 .. Possibility of starting new game after game over
 . Decent GUI
-.. Game board fills the window
+.. Game board <<#viewbox,fills>> the window
 .. Game board is centered
-. At least 3 extensions
+. At least 3 <<#extensions,extensions>>
 
-== Implementation Requirements
+=== Implementation Requirements
 
 . The VM *must* be 100% independent of the V and WPF.
   Check your project dependencies!
@@ -56,6 +56,7 @@ Not satisfying all requirements listed below will lead to a failing grade.
 . No hard coded file paths
 . No external libraries
 
+[#extensions]
 == Extension Suggestions
 
 If an extension is implemented wrong, it will not be counted.
@@ -69,3 +70,23 @@ We suggest to make some extra extensions as a safety measure.
 * Timer
 * Let players choose colors in settings screen
 * User Defined WPF Control for Stones
+
+== Extra Information
+
+[#crashes]
+=== No Crashes
+
+The provided model classes throw exceptions when called inappropriately.
+For example, you cannot use the `PutStone` method once the game is over.
+Therefore, in order to prevent crashes, you will need to make sure the ViewModel only accesses Model members when it is valid to do so.
+
+[#screens]
+=== Screens
+
+By screens we mean that there is a *single window* whose entire contents can be switched out.
+A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].
+
+[#viewbox]
+=== ViewBox
+
+Look up `ViewBox` for an easy way to automatically scale your view.
