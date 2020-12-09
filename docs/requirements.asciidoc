@@ -35,7 +35,7 @@ Not satisfying all requirements listed below will lead to a failing grade.
 .. Ability to place stones
 .. Invalid moves are prevented
 .. Indication of current player
-.. Forbidden moves due to capturing are shown
+.. Forbidden moves due to capturing are shown in a special color. The standard disabled color does not count! There has to be separate logic checking for captured positions.
 .. Detection of end of game: message with winner/tie is shown
 .. Possibility of starting new game after game over
 . Decent GUI
@@ -62,7 +62,7 @@ Not satisfying all requirements listed below will lead to a failing grade.
 If an extension is implemented wrong, it will not be counted.
 We suggest to make some extra extensions as a safety measure.
 
-* In Play Screen, when mouse hovers over square, it lights up
+* In Play Screen, when mouse hovers over square, it lights up. Note: the default highlight of ``Button``s does not count! Either change the highlight color or use something different than ``Button``s). This extension requires some code to be written.
 * After winning, highlight winning squares
 * Choice between themes (e.g. dark and light theme)
 * Undoing moves
