@@ -35,7 +35,7 @@ Failure to meet these requirements will inevitably lead to a failing grade.
 .. Ability to place stones
 .. Invalid moves are prevented
 .. Indication of current player
-.. Forbidden moves due to capturing are shown
+.. Forbidden moves due to capturing are <<#disabled-buttons,shown>>
 .. Detection of end of game: message with winner/tie is shown
 .. Possibility of starting new game after game over
 . Decent GUI
@@ -62,7 +62,7 @@ Failure to meet these requirements will inevitably lead to a failing grade.
 If an extension is implemented wrong, it will not be counted.
 We suggest to make some extra extensions as a safety measure.
 
-* In Play Screen, when mouse hovers over square, it lights up
+* In Play Screen, when mouse hovers over square, <<#disabled-buttons,it lights up>>
 * After winning, highlight winning squares
 * Choice between themes (e.g. dark and light theme)
 * Undoing moves
@@ -128,7 +128,97 @@ This can be done by right clicking on the external file in the Solution Explorer
 Alternatively, you can also pack your external files into the executable file.
 You will need https://docs.microsoft.com/en-us/dotnet/desktop/wpf/app-development/pack-uris-in-wpf?view=netframeworkdesktop-4.8[pack URIs] to refer to them.
 
+[#animation]
 === Animations
 
 * https://docs.microsoft.com/en-us/dotnet/desktop/wpf/graphics-multimedia/animation-overview[Official documentation]
 * A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].
+
+[#disabled-buttons]
+=== Disabled Buttons
+
+As mentioned in the requirements, you need to disable buttons when no stone can be put there.
+However, it appears that whenever a `Button` is disabled, you cannot choose its background color.
+This causes problems in the following cases:
+
+* Highlighting the button when the mouse hovers over it.
+* Highlighting captured positions.
+
+There are multiple ways of solving this problem.
+Here, we present one using ``ControlTemplate``s.
+
+A `Button` has a default look and feel, but WPF allows you to customize its appearance.
+If only small cosmetic changes are necessary, you can rely on styles.
+However, it is also possible to rebuild a button from the ground up using https://docs.microsoft.com/en-us/dotnet/desktop/wpf/themes/how-to-create-apply-template[``ControlTemplate``s].
+
+[source,xml]
+----
+<Button>
+  <Button.Template>
+    <ControlTemplate TargetType="{x:Type Button}">
+      <Border Name="border" Background="Gray" BorderThickness="1" BorderBrush="Black">
+        <ContentPresenter />
+      </Border>
+    </ControlTemplate>
+  </Button.Template>
+  Hello world
+</Button>
+----
+
+In the example above, the `Button` will look like a rectangle with a gray background and a black thin border.
+Inside this rectangle, the contents of the `Button` will be placed, in our case, the text `Hello world`.
+Note that we gave the `Border` a name, i.e., `border`.
+This will come in handy later.
+
+A `ControlTemplate` allows you to define https://www.wpf-tutorial.com/styles/trigger-datatrigger-event-trigger/[_triggers_].
+A trigger is activated when a certain value changes to a certain value.
+For example, we can define a trigger that gets actived when the ``Button``'s ``IsMouseOver` property changes to `True`:
+
+[source,xml]
+----
+<Trigger Property="IsMouseOver" Value="True">
+  ...
+</Trigger>
+----
+
+You can then define what should happen when the trigger activates:
+
+[source,xml]
+----
+<Trigger Property="IsMouseOver" Value="True">
+  <Setter TargetName="border" Property="BorderBrush" Value="Red" >
+</Trigger>
+----
+
+This code will cause the border of the button to turn red whenever the mouse hovers over it.
+This trigger needs to be defined as part of the `ControlTemplate` as follows:
+
+[source,xml]
+----
+<Button>
+  <Button.Template>
+    <ControlTemplate TargetType="{x:Type Button}">
+      <Border Name="border" Background="Gray" BorderThickness="1" BorderBrush="Black">
+        <ContentPresenter />
+      </Border>
+      <ControlTemplate.Triggers>
+        <Trigger Property="IsMouseOver" Value="True">
+          <Setter TargetName="border" Property="BorderBrush" Value="Red" >
+        </Trigger>
+      </ControlTemplate.Triggers>
+    </ControlTemplate>
+  </Button.Template>
+  Hello world
+</Button>
+----
+
+There are multiple types of triggers:
+
+* `Trigger`: use these to affect the control's appearance based on its own state.
+  In other words, the properties (such as `IsMouseOver` in our example) are taken from the control itself (i.e., the `Button`).
+  https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.button[Other examples] of properties that triggers can work with are `IsPressed`, `IsVisible`, `IsFocused`, `IsEnabled`, etc.
+* `DataTrigger`: these get their data from the `DataContext`.
+  For example, you can change the `Background` based on some property in the ``Button``'s associated View Model.
+* `EventTrigger`: activate when a certain event occurs, such as `DragEnter`, `DragLeave`, `Drop`, `Click`, etc.
+
+A few demos are available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].

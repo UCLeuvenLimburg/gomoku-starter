@@ -374,7 +374,7 @@ If you look at the implementation of `Stone`, you will see that the `ToString()`
 
 Right now, we draw each square using
 
-[source,xaml]
+[source,xml]
 ----
 <Button Content="{Binding .}" Width="32" Height="32" />
 ----
@@ -386,7 +386,7 @@ Given that WPF has no clue about how to draw ``Stone``s, we need to help it out 
 ====
 In `MainWindow.xaml`, change the button to
 
-[source,xaml]
+[source,xml]
 ----
 <Button Width="32" Height="32">
     <Ellipse Width="24" Height="24" Fill="Red" />
