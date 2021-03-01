@@ -33,7 +33,7 @@ Next, let's tell these freshly created projects which other projects they can de
 [NOTE,caption={task-caption}]
 ====
 * In the Solution Explorer, right click on Dependencies under ViewModel, pick add Project Dependencies and select Cells and Model. Definitely do *not* select View.
-* Similarly, add the following dependencies to the View project: Cells, Model and ViewModel (i.e., all three).
+* Add ViewModel as a dependency for View. This way, View will automatically "inherit" the ViewModel's dependencies (i.e., Cells and Model) and will be able to make use of those.
 ====
 
 This leads to the following dependency structure:
