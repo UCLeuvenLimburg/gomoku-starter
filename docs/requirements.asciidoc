@@ -64,7 +64,7 @@ We suggest to make some extra extensions as a safety measure.
 
 * In Play Screen, when mouse hovers over square, <<#disabled-buttons,it lights up>>. Note: the default highlight of ``Button``s does not count! Either change the highlight color or use something different than ``Button``s). This extension requires some code to be written.
 * After winning, highlight winning squares
-* Choice between themes (e.g. dark and light theme)
+* Choice between <<#themes,themes>> (e.g. dark and light theme)
 * Undoing moves
 * <<#animation,Animation>> (NOT gifs, but WPF animations)
 * Timer
@@ -133,6 +133,12 @@ You will need https://docs.microsoft.com/en-us/dotnet/desktop/wpf/app-developmen
 
 * https://docs.microsoft.com/en-us/dotnet/desktop/wpf/graphics-multimedia/animation-overview[Official documentation]
 * A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].
+
+[#themes]
+=== Themes
+
+* A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].
+* https://michaelscodingspot.com/wpf-complete-guide-themes-skins/(Guide)
 
 [#disabled-buttons]
 === Disabled Buttons
