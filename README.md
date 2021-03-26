@@ -1,3 +1,3 @@
 # Gomoku Project
 
-[Start here](docs/overview.asciidoc)
+Toledo contains a link to the compiled version of the guide.
