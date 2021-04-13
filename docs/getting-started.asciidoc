@@ -581,7 +581,7 @@ Next, update the `MainWindow` constructor.
 * Remove the `Row` and `Rows` methods from the `MainWindow` class, that functionality has been moved to `GameViewModel`.
 
 Finally, in the XAML file, update the ``ItemsControl``'s `ItemsSource` binding.
-It used to receive the rows directly as `DataContext`, but now they are stored inside a `GameViewModel`object's `Rows` property.
+It used to receive the rows directly as `DataContext`, but now they are stored inside a `GameViewModel` object's `Rows` property.
 
 As always, run the code.
 The same 5 &times; 5 grid of buttons should still appear.
