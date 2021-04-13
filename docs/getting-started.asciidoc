@@ -234,7 +234,7 @@ this.boardView.ItemsSource = grid;
 
 If you run your code, you should see three horizontally arranged buttons.
 Each `Button` has a `List<string>` as `DataContext`, which is also uses as `Content`.
-Since WPF does not know how to render these, it decides to improve.
+Since WPF does not know how to render these, it decides to improvise.
 ====
 
 Now comes the tricky part: we need to visualize this grid.
