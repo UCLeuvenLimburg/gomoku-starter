@@ -715,24 +715,24 @@ Everything should still work.
 
 [NOTE,caption={task-caption}]
 ====
-Next, we need to let `BoardGameViewModel` pass the `IGame` along to `BoardGameRowViewModel`.
-Add an extra `IGame` parameter to its constructor and update `BoardGameViewModel` accordingly.
-Right now, `BoardGameViewModel` doesn't need to do anything with this `IGame`.
+Next, we need to let `GameBoardViewModel` pass the `IGame` along to `GameBoardRowViewModel`.
+Add an extra `IGame` parameter to its constructor and update `GameBoardViewModel` accordingly.
+Right now, `GameBoardViewModel` doesn't need to do anything with this `IGame`.
 
 Run your code and check that everything works.
 ====
 
 [NOTE,caption={task-caption}]
 ====
-Now we have `BoardGameRowViewModel` pass the `IGame` to `BoardGameSquareViewModel.`
-At this stage, `BoardGameSquareViewModel` needn't do anything with the `IGame`.
+Now we have `GameBoardRowViewModel` pass the `IGame` to `GameBoardSquareViewModel.`
+At this stage, `GameBoardSquareViewModel` needn't do anything with the `IGame`.
 
 Again, run your code.
 ====
 
 [NOTE,caption={task-caption}]
 ====
-Finally, have `BoardGameSquareViewModel` give the `IGame` to `PutStoneCommand`.
+Finally, have `GameBoardSquareViewModel` give the `IGame` to `PutStoneCommand`.
 `PutStoneCommand` will have to store the `IGame` in a field.
 
 Yes, run your code, yet again.
@@ -770,7 +770,7 @@ Since it is a full row, we can only give it its `y` coordinate.
 
 Lastly, `GameBoardViewModel`.
 
-* Update this class so that it gives each `BoardGameRowViewModel` its corresponding `y` coordinate.
+* Update this class so that it gives each `GameBoardRowViewModel` its corresponding `y` coordinate.
 
 Run your code and check that everything still works.
 ====
@@ -890,13 +890,13 @@ It is important that you understand what is going on here:
 * The change in `currentGame` causes `currentGameBoard` to be updated.
 * `upperLeftCorner` is aware of this change and fetches its new value from the board: `Stone.BLACK`.
 
-We can create one derived cell per square and wrap each one in a `BoardGameSquareViewModel` object.
+We can create one derived cell per square and wrap each one in a `GameBoardSquareViewModel` object.
 
 image::game-cell.svg[Static,600,align="center"]
 
 Using cells takes care of two issues at once:
 
-* We don't need to manually update all ``BoardGameSquareViewModel``s `Owner` property anymore: this is done automatically by derived cells.
+* We don't need to manually update all ``GameBoardSquareViewModel``s `Owner` property anymore: this is done automatically by derived cells.
 * WPF "understands" cells (because they implement the `INotifyPropertyChanged` interface). Whenever a cell's value changes, WPF will know that it will need to rerender the view.
 
 It is now time for you to introduce cells in your code.
