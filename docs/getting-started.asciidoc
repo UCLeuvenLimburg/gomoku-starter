@@ -682,7 +682,7 @@ Debug.WriteLine("You clicked me");
 * `CanExecute` can for now always return `true`.
 * In `GameBoardSquareViewModel`, add a `PutStone` property of type `ICommand`, getter only.
 * Initialize this `PutStone` property in the constructor.
-* In `MainWindow.xaml`, update the `Button` so that pressing it invokes `PutCommand`.
+* In `MainWindow.xaml`, update the `Button` so that pressing it invokes `PutStone`.
 
 Run it.
 Whenever you click a button, `You clicked me` should appear in the output pane.
