@@ -690,7 +690,7 @@ Whenever you click a button, `You clicked me` should appear in the output pane.
 
 === Passing Along IGame
 
-We would like to implement ``PutStoneCommand``'s ``Execute` method, but we run into a number of issues.
+We would like to implement ``PutStoneCommand``'s `Execute` method, but we run into a number of issues.
 We'll deal with each in turn.
 
 The functionality for placing stones resides in the `PutStone` method of `IGame`.
@@ -706,8 +706,6 @@ Currently, `GameBoardViewModel` receives only an `IGameBoard`.
 
 * Its constructor should receive an `IGame` instead of an `IGameBoard`.
 * In the constructor, retrieve the `IGameBoard` from the `IGame`.
-
-Note that `GameBoardViewModel` does *not* need to save the `IGame` itself in a field; saving the `IGameBoard` is sufficient.
 
 Run your code after this step.
 Everything should still work.
