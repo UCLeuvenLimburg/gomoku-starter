@@ -138,7 +138,7 @@ You will need https://docs.microsoft.com/en-us/dotnet/desktop/wpf/app-developmen
 === Themes
 
 * A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].
-* https://michaelscodingspot.com/wpf-complete-guide-themes-skins/(Guide)
+* https://michaelscodingspot.com/wpf-complete-guide-themes-skins/[Guide]
 
 [#disabled-buttons]
 === Disabled Buttons
