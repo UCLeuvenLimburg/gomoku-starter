@@ -139,6 +139,8 @@ You will need https://docs.microsoft.com/en-us/dotnet/desktop/wpf/app-developmen
 
 * A demo is available in the https://github.com/UCLeuvenLimburg/wpf-samples[Samples Repo].
 * https://michaelscodingspot.com/wpf-complete-guide-themes-skins/[Guide]
+* Since themes are View-specific and are implemented with almost nothing but WPF-specific code, you can deal with them purely in the View.
+  If buttons are involved, you do not have to use commands but can specify their behavior using `Click`.
 
 [#disabled-buttons]
 === Disabled Buttons
