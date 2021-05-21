@@ -100,7 +100,7 @@ It is of utmost importance that you get these right.
 
 * The View project
 ** Framework dependencies: .NET Core and WPF.
-** Project dependencies: Cells, Model, ViewModel
+** Project dependencies: ViewModel (Cell and Model are "inherited" from ViewModel)
 * The ViewModel project
 ** Framework dependencies: it can depend on .NET Core, but *not* on WPF.
 ** Project dependencies: only Cells and Model are allowed.
