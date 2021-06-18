@@ -51,10 +51,24 @@ Failure to meet these requirements will inevitably lead to a failing grade.
 . The V must receive all its data through bindings to the VM.
 . Do not deal with events (e.g., `Click`) in the code behind but rely on commands in the VM.
 . The VM/M must not make *any* View-related decisions.
-.. No brushes/colors/... are allowed in the VM.
+.. No brushes/colors/... are allowed in the VM. Colors should simply not exist in the VM (except of course if colors are inherent to the domain, but this is not the case for Gomoku.)
 .. The VM must not contain strings that are shown in the V.
 . <<#external-files,No hard coded absolute paths>>
 . No external libraries
+
+[WARNING]
+====
+Be very wary of strings exposed by the VM to the V!
+Students fail because they violate one of the requirements, and this violation often takes the form of a string that goes from VM to V.
+
+While there is technically nothing wrong in sending a string from VM to V, it can definitely be a violation of the rules:
+
+* If the string contains a message that is shown by the V, it is a violation.
+* If the string represents a color, it is a violation.
+
+So, if at some point the VM exposes a string to the V, think really hard about whether this is a safe thing to do.
+You might want to reconsider your approach.
+====
 
 [#extensions]
 == Extension Suggestions
