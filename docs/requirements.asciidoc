@@ -42,6 +42,8 @@ Failure to meet these requirements will inevitably lead to a failing grade.
 .. Game board <<#viewbox,fills>> the window
 .. Game board is centered
 . At least 3 <<#extensions,extensions>>
+. It must work using Visual Studio.
+  Realize that Rider does _not_ seem to produce VS-compatible projects.
 
 === Implementation Requirements
 
